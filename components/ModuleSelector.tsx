@@ -6,8 +6,11 @@ interface ModuleSelectorProps {
 }
 
 export default function ModuleSelector({ userRole }: ModuleSelectorProps) {
+  const isAdmin = ['SUPERADMIN', 'ADMIN'].includes(userRole);
+
   return (
-    <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+    <>
+      <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-8">
       <Link href="/padlet/dashboard" className="group">
         <div className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-blue-500">
           <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -51,6 +54,47 @@ export default function ModuleSelector({ userRole }: ModuleSelectorProps) {
           </div>
         </div>
       </Link>
-    </div>
+      </div>
+
+      {isAdmin && (
+        <div className="max-w-4xl mx-auto">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Administration</h3>
+          <div className="grid md:grid-cols-3 gap-4">
+            <Link href="/admin/users" className="group">
+              <div className="bg-gradient-to-br from-purple-500 to-purple-700 rounded-xl shadow-md p-6 hover:shadow-lg transition-all transform hover:scale-105">
+                <div className="flex items-center space-x-3">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                  </svg>
+                  <span className="text-white font-semibold">Utilisateurs</span>
+                </div>
+              </div>
+            </Link>
+
+            <Link href="/rame/admin" className="group">
+              <div className="bg-gradient-to-br from-orange-500 to-orange-700 rounded-xl shadow-md p-6 hover:shadow-lg transition-all transform hover:scale-105">
+                <div className="flex items-center space-x-3">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-white font-semibold">Rame Admin</span>
+                </div>
+              </div>
+            </Link>
+
+            <Link href="/padlet/admin" className="group">
+              <div className="bg-gradient-to-br from-pink-500 to-pink-700 rounded-xl shadow-md p-6 hover:shadow-lg transition-all transform hover:scale-105">
+                <div className="flex items-center space-x-3">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-white font-semibold">Padlet Admin</span>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
