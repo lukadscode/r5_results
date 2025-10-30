@@ -1,9 +1,4 @@
 <div class="d-flex flex-column flex-root" id="kt_app_root">
-    <style>
-        body {
-            background-color: blue;
-        }
-    </style>
 
     <div class="d-flex flex-column flex-center flex-column-fluid">
         <div class="d-flex flex-column flex-center text-center p-10">

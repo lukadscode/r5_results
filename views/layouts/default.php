@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultats rame en 5e</title>
     <link rel="stylesheet" href="/css/keen.css">
+    <link href="https://preview.keenthemes.com/html/keen/docs/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="https://preview.keenthemes.com/keen/demo8/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -39,6 +42,13 @@
             document.documentElement.setAttribute("data-bs-theme", themeMode);
         }
     </script> <?= $content ?>
+    <?php
+    if (!empty($signupErrors)) {
+        foreach ($signupErrors as $error) {
+            echo displayAlert('danger', 'Erreur', htmlspecialchars($error));
+        }
+    }
+    ?>
 
     <!--begin::Footer-->
     <div id="kt_app_footer" class="app-footer ">
@@ -63,9 +73,22 @@
     <!--end::Footer-->
 
     <script src="https://kit.fontawesome.com/3f0cec6f2e.js" crossorigin="anonymous"></script>
-    <script src="https://preview.keenthemes.com/keen/demo8/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="/js/plugins.bundle.js"></script>
     <script src="https://preview.keenthemes.com/keen/demo8/assets/js/scripts.bundle.js"></script>
+
+
+    <script src="https://preview.keenthemes.com/keen/demo8/assets/js/custom/documentation/documentation.js"></script>
+    <script src="https://preview.keenthemes.com/keen/demo8/assets/js/custom/documentation/search.js"></script>
+    <!--end::Global Javascript Bundle-->
+
+    <!--begin::Vendors Javascript(used for this page only)-->
+    <script src="https://preview.keenthemes.com/html/keen/docs/assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
+    <!--end::Vendors Javascript-->
+
+    <!--begin::Custom Javascript(used for this page only)-->
     <script src="https://preview.keenthemes.com/html/keen/docs/assets/js/custom/documentation/forms/select2.js"></script>
+
+
 
 </body>
 

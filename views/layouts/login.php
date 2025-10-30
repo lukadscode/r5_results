@@ -26,6 +26,13 @@
 
         /* EOS */
     </style>
+    <?php
+    if (!empty($signupErrors)) {
+        foreach ($signupErrors as $error) {
+            echo displayAlert('danger', 'Erreur', htmlspecialchars($error));
+        }
+    }
+    ?>
     <div class="container-fluid ps-md-0">
 
         <div class="bg-image"></div>

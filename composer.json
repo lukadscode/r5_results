@@ -10,6 +10,7 @@
         "filp/whoops": "^2.14",
         "phpmailer/phpmailer": "^6.6",
         "tecnickcom/tcpdf": "^6.5",
-        "http-interop/http-factory-guzzle": "^1.2"
+        "http-interop/http-factory-guzzle": "^1.2",
+        "phpoffice/phpspreadsheet": "^2.1"
     }
 }

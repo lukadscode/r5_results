@@ -1,3 +1,28 @@
+<?php
+
+// Inclure vos dépendances et initialiser la connexion PDO
+
+use App\Models\Eleve;
+use App\Models\Classe;
+use App\Connection;
+
+// Connexion à la base de données
+$pdo = Connection::getPDO(); // Assurez-vous d'utiliser correctement votre classe de connexion
+
+// Instanciation du modèle de Classe
+$classeModel = new Classe($pdo);
+
+$etablissementModel = new App\Models\Etablissement($pdo);
+
+// Récupération des détails de la classe à partir du token
+$classes = $classeModel->getAllClasses($token);
+
+$eleveModel = new Eleve($pdo);
+
+
+
+?>
+
 <div class="card-header align-items-center py-5 gap-2 gap-md-5">
     <div class="card-title">
         <!--begin::Search-->
@@ -60,7 +85,8 @@
             <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase">
                 <th class="text-center min-w-100px">N°</th>
                 <th class="text-center min-w-100px">Département</th>
-                <th class="text-center min-w-100px">Collège</th>
+                <th class="text-left min-w-100px">Ville</th>
+                <th class="text-left min-w-100px">Collège</th>
                 <th class="text-center min-w-100px">Classe</th>
                 <th class="text-center ">Distance</th>
                 <th class="text-center ">Statut</th>
@@ -69,39 +95,42 @@
             <!--end::Table row-->
         </thead>
         <tbody class="fw-semibold text-gray-600">
-            <tr class="odd">
-                <td class="text-center">
-                    <a href="#" class="text-gray-900 text-hover-primary">1</a>
-                </td>
-                <td class="text-center">
-                    <a href="#" class="text-gray-900 text-hover-primary">Seine et marne</a>
-                </td>
-                <td class="text-center">Collège Henri IV
-                </td>
-                <td class="text-center">5e2</td>
-                <td class="text-center pe-0">294,2</td>
-                <td class="text-center pe-0">
-                    <div class="badge badge-light-success">Valide</div>
-                </td>
-                <td class="text-center mx-auto"><i class="fa-solid fa-pen-to-square px-3"></i><i class="fa-solid fa-trash text-danger h3 px-3"></i></td>
-            </tr>
-            <tr class="odd">
-                <td class="text-center">
-                    <a href="#" class="text-gray-900 text-hover-primary">2</a>
-                </td>
-                <td class="text-center">
-                    <a href="#" class="text-gray-900 text-hover-primary">Seine et marne</a>
-                </td>
-                <td class="text-center">Collège Henri IV
-                </td>
-                <td class="text-center">5e3</td>
-                <td class="text-center pe-0">297,2</td>
-                <td class="text-center pe-0">
-                    <div class="badge badge-light-warning">En cours</div>
-                </td>
-                <td class="text-center mx-auto"><i class="fa-solid fa-pen-to-square px-3"></i><i class="fa-solid fa-trash text-danger h3 px-3"></i></td>
-            </tr>
-
+            <?php foreach ($classes as $index => $classe) : ?>
+                <?php
+                // Récupérer les informations de l'établissement
+                $etablissement = $etablissementModel->getEtablissementById($classe['etablissement_id']);
+                ?>
+                <tr class="<?= $index % 2 == 0 ? 'even' : 'odd'; ?>">
+                    <td class="text-center">
+                        <a href="#" class="text-gray-900 text-hover-primary"><?= htmlspecialchars($classe['id']) ?></a>
+                    </td>
+                    <td class="text-center">
+                        <a href="#" class="text-gray-900 text-hover-primary"><?= htmlspecialchars($etablissement['Code_departement']) ?></a>
+                    </td>
+                    <td class=""><?= htmlspecialchars($etablissement['Nom_commune']) ?></td>
+                    <td class=""><?= htmlspecialchars($etablissement['Nom_etablissement']) ?></td>
+                    <td class="text-center"><?= htmlspecialchars($classe['nom_classe']) ?></td>
+                    <?php
+                    // Récupérer les informations de l'établissement
+                    $eleve = $eleveModel->getAverageWeightedDistanceByClasse($classe['id']);
+                    var_dump($eleve);
+                    ?>
+                    <td class="text-center pe-0"><?= htmlspecialchars($averageWeightedDistance) ?></td>
+                    <td class="text-center pe-0">
+                        <div class="badge badge-light-<?= htmlspecialchars($classe['statut'] == '2' ? 'success' : 'warning') ?>">
+                            <?= htmlspecialchars($classe['statut'] == '2' ? 'Valide' : 'En cours') ?>
+                        </div>
+                    </td>
+                    <td class="text-center mx-auto">
+                        <a href="/classe/<?= htmlspecialchars($classe['token']) ?>" class="text-gray-900 text-hover-primary">
+                            <i class="fa-solid fa-pen-to-square px-3"></i>
+                        </a>
+                        <a href="/delete/classe/<?= htmlspecialchars($classe['id']) ?>" class="text-danger">
+                            <i class="fa-solid fa-trash h3 px-3"></i>
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
         </tbody>
     </table>
 </div>
