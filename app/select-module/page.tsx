@@ -2,6 +2,8 @@ import { getCurrentUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import ModuleSelector from '@/components/ModuleSelector';
 
+export const dynamic = 'force-dynamic';
+
 export default async function SelectModulePage() {
   const user = await getCurrentUser();
 
