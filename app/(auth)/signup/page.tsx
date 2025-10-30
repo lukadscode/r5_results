@@ -13,7 +13,7 @@ export default function SignupPage() {
     confirmPassword: '',
     firstName: '',
     lastName: '',
-    role: 'COACH' as 'COACH' | 'ADMIN_LIGUE',
+    role: 'PROFESSEUR' as 'PROFESSEUR' | 'COACH' | 'ADMIN_LIGUE',
     ligueId: '',
     etablissementId: '',
   });
@@ -40,21 +40,24 @@ export default function SignupPage() {
   }, []);
 
   useEffect(() => {
-    if (formData.ligueId) {
+    if (formData.ligueId && (formData.role === 'PROFESSEUR' || formData.role === 'COACH')) {
+      const etablissementType = formData.role === 'PROFESSEUR' ? 'COLLEGE' : 'CLUB';
       setFilteredEtablissements(
-        etablissements.filter((e) => e.ligue_id === formData.ligueId)
+        etablissements.filter((e) =>
+          e.ligue_id === formData.ligueId && e.type === etablissementType
+        )
       );
     } else {
-      setFilteredEtablissements(etablissements);
+      setFilteredEtablissements([]);
     }
-  }, [formData.ligueId, etablissements]);
+  }, [formData.ligueId, formData.role, etablissements]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-      ...(name === 'ligueId' ? { etablissementId: '' } : {}),
+      ...(name === 'ligueId' || name === 'role' ? { etablissementId: '' } : {}),
     }));
   };
 
@@ -81,8 +84,8 @@ export default function SignupPage() {
       return;
     }
 
-    if (formData.role === 'COACH' && !formData.etablissementId) {
-      setError('Veuillez sélectionner un établissement');
+    if ((formData.role === 'COACH' || formData.role === 'PROFESSEUR') && !formData.etablissementId) {
+      setError(formData.role === 'PROFESSEUR' ? 'Veuillez sélectionner un collège' : 'Veuillez sélectionner un club');
       setLoading(false);
       return;
     }
@@ -271,7 +274,8 @@ export default function SignupPage() {
                   required
                   disabled={loading}
                 >
-                  <option value="COACH">Coach / Professeur</option>
+                  <option value="PROFESSEUR">Professeur (Collège)</option>
+                  <option value="COACH">Coach (Club d'aviron)</option>
                   <option value="ADMIN_LIGUE">Administrateur de Ligue</option>
                 </select>
               </div>
@@ -298,10 +302,10 @@ export default function SignupPage() {
                 </select>
               </div>
 
-              {formData.role === 'COACH' && (
+              {(formData.role === 'COACH' || formData.role === 'PROFESSEUR') && (
                 <div>
                   <label htmlFor="etablissementId" className="block text-sm font-semibold text-gray-700 mb-2">
-                    Établissement (Club / Collège) *
+                    {formData.role === 'PROFESSEUR' ? 'Collège *' : 'Club d\'aviron *'}
                   </label>
                   <select
                     id="etablissementId"
@@ -311,15 +315,22 @@ export default function SignupPage() {
                     className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                     disabled={loading || !formData.ligueId}
                   >
-                    <option value="">Sélectionnez un établissement</option>
+                    <option value="">
+                      {formData.role === 'PROFESSEUR' ? 'Sélectionnez un collège' : 'Sélectionnez un club'}
+                    </option>
                     {filteredEtablissements.map((etab) => (
                       <option key={etab.id} value={etab.id}>
-                        {etab.name} ({etab.type})
+                        {etab.name}
                       </option>
                     ))}
                   </select>
                   {!formData.ligueId && (
                     <p className="text-xs text-gray-500 mt-1">Sélectionnez d'abord une ligue</p>
+                  )}
+                  {formData.ligueId && filteredEtablissements.length === 0 && (
+                    <p className="text-xs text-orange-600 mt-1">
+                      Aucun {formData.role === 'PROFESSEUR' ? 'collège' : 'club'} disponible pour cette ligue
+                    </p>
                   )}
                 </div>
               )}
