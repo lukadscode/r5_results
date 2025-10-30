@@ -1,7 +1,8 @@
-export const dynamic = 'force-dynamic';
 import { getCurrentUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import ThemeView from '@/components/padlet/ThemeView';
+
+export const dynamic = 'force-dynamic';
 
 export default async function ThemePage({ params }: { params: { id: string } }) {
   const user = await getCurrentUser();
