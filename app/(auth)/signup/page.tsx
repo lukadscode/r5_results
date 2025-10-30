@@ -63,6 +63,30 @@ export default function SignupPage() {
     setError(null);
     setLoading(true);
 
+    if (!formData.firstName || !formData.lastName) {
+      setError('Veuillez renseigner votre prénom et nom');
+      setLoading(false);
+      return;
+    }
+
+    if (!formData.email) {
+      setError('Veuillez renseigner votre email');
+      setLoading(false);
+      return;
+    }
+
+    if (!formData.ligueId) {
+      setError('Veuillez sélectionner une ligue');
+      setLoading(false);
+      return;
+    }
+
+    if (formData.role === 'COACH' && !formData.etablissementId) {
+      setError('Veuillez sélectionner un établissement');
+      setLoading(false);
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError('Les mots de passe ne correspondent pas');
       setLoading(false);
@@ -285,7 +309,6 @@ export default function SignupPage() {
                     value={formData.etablissementId}
                     onChange={handleChange}
                     className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-                    required
                     disabled={loading || !formData.ligueId}
                   >
                     <option value="">Sélectionnez un établissement</option>
